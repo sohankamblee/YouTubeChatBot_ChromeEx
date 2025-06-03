@@ -1,0 +1,70 @@
+/* General chatbot container */
+#chatbot-container {
+  width: 320px;
+  height: 480px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* Chat messages area */
+#chat-messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+}
+
+/* User message */
+.message.user {
+  background-color: #dcf8c6;
+  align-self: flex-end;
+  margin: 4px 0;
+  padding: 8px 10px;
+  border-radius: 15px 15px 0 15px;
+  max-width: 80%;
+}
+
+/* Bot message */
+.message.bot {
+  background-color: #e2e2e2;
+  align-self: flex-start;
+  margin: 4px 0;
+  padding: 8px 10px;
+  border-radius: 15px 15px 15px 0;
+  max-width: 80%;
+}
+
+/* Input box and send button */
+#input-area {
+  display: flex;
+  border-top: 1px solid #ccc;
+  padding: 10px;
+  background-color: #fff;
+}
+
+#user-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#send-button {
+  margin-left: 8px;
+  padding: 8px 12px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#send-button:hover {
+  background-color: #45a049;
+}
