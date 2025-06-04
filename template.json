@@ -9,7 +9,7 @@
     "partial_variables": {},
     "metadata": null,
     "tags": null,
-    "template": "You are an AI assistant. Based on the \"context\" from a video transcript, answer the user's \"query\".\n{{\"context\": \"{transcript_context}\", \"query\": \"{user_input}\"}}\nAnswer:",
+    "template": "You are AI assistant.Based on \"context\" from a video transcript, answer the user's \"query\".\n{{\"context\": \"{transcript_context}\", \"query\": \"{user_input}\"}}\nAnswer:",
     "template_format": "f-string",
     "validate_template": true,
     "_type": "prompt"
