@@ -20,7 +20,7 @@ def get_video_transcript(video_id):
         print(f"An unexpected error occurred while fetching transcript for video ID {video_id}: {e}")
         return None
 
-video_id= "Gfr50f6ZBvo" 
+video_id= "2gtskGWSgew" 
 print(f"\n--- Attempting to get transcript for {video_id}")
 transcript_data = get_video_transcript(video_id)
 if transcript_data:

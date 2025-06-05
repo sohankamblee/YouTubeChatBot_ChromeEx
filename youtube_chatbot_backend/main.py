@@ -5,6 +5,7 @@ from youtube_chatbot_backend.utils.transcript_parser import get_transcript, merg
 from youtube_chatbot_backend.rag_pipeline import get_chat_response
 #from pydantic import BaseModel
 import logging
+import time
 
 app = FastAPI()
 
@@ -17,6 +18,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Global cache
+transcript_cache = {}
 
 # Configure logging (new)
 logging.basicConfig(level=logging.INFO)
@@ -40,6 +44,17 @@ async def env_check():
         "internet_access": internet
     }
 
+def get_transcript_with_retry(video_id: str, retries: int = 2, delay: float = 2.0):
+    for attempt in range(retries):
+        try:
+            logging.info(f"Fetching transcript for video_id={video_id}, attempt {attempt + 1}")
+            return get_transcript(video_id)
+        except Exception as e:
+            logging.warning(f"Transcript fetch attempt {attempt + 1} failed: {e}")
+            if attempt < retries - 1:
+                time.sleep(delay)
+            else:
+                raise
 
 @app.post("/chat")
 async def chat_endpoint(request: Request):
@@ -52,10 +67,8 @@ async def chat_endpoint(request: Request):
     video_id = body.get("video_id")
     user_input = body.get("user_input")
 
-    # Log received input (new)
     logging.info(f"Received request with video_id={video_id} and user_input={user_input}")
 
-    # Validate input (new)
     if not video_id or not user_input:
         return {"error": "Missing video_id or user_input in request."}
 
@@ -63,9 +76,15 @@ async def chat_endpoint(request: Request):
         return {"response": "Chatbot session ended."}
 
     try:
-        transcript = get_transcript(video_id)
+        # Use cached transcript if available
+        if video_id in transcript_cache:
+            transcript = transcript_cache[video_id]
+            logging.info(f"Transcript for video_id={video_id} loaded from cache.")
+        else:
+            transcript = get_transcript_with_retry(video_id)
+            transcript_cache[video_id] = transcript
+            logging.info(f"Transcript for video_id={video_id} fetched and cached.")
 
-        # Debug log transcript (new)
         if not transcript:
             logging.warning(f"No transcript found for video_id={video_id}")
             return {"error": f"No transcript found for video_id: {video_id}"}
